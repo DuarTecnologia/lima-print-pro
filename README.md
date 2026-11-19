@@ -1,1 +1,0 @@
-# lima-print-pro
