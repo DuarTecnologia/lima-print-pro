@@ -79,6 +79,15 @@ header{background:#101522dc;border:0;border-bottom:1px solid #ffffff24}
 .contact{background:linear-gradient(110deg,#12374f80,#46244780);border-block:1px solid #ffffff26}
 .button.secondary{border-color:#ffffff40}
 footer{background:#10152285}
+.quote-form{max-width:44rem}
+.quote-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-bottom:1.1rem}
+.quote-fields label{display:grid;gap:.4rem;font-weight:700}
+.quote-fields input,.quote-fields select,.quote-fields textarea{width:100%;min-width:0;min-height:48px;padding:.7rem;border:1px solid #ffffff45;border-radius:.5rem;background:#151825;color:inherit;font:inherit;font-weight:400}
+.quote-fields :focus-visible,.quote-form button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.quote-details{grid-column:1/-1}
+.quote-fields textarea{resize:vertical}
+.quote-form button{border:0;cursor:pointer;font:inherit;font-weight:800}
+@media(max-width:36rem){.quote-fields{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -92,7 +101,7 @@ footer{background:#10152285}
 <p class="kicker">Personalizados sob encomenda</p>
 <h1 id="titulo">Suas fotos viram <em>presentes.</em></h1>
 <p class="intro">Uma lembrança de família, uma data especial ou um presente com a cara de alguém. Personalize com a sua foto ou ideia.</p>
-<div class="actions"><a class="button" href="https://wa.me/5511926822252?text=Ol%C3%A1%2C%20Lima%20Print%20Pro%21%20Gostaria%20de%20um%20or%C3%A7amento%20para%20um%20produto%20personalizado.">Pedir orçamento</a><a class="button secondary" href="#galeria">Ver trabalhos</a></div>
+<div class="actions"><a class="button" href="#contato">Pedir orçamento</a><a class="button secondary" href="#galeria">Ver trabalhos</a></div>
 </div>
 <figure class="showcase"><img src="assets/brindes.webp" alt="Brindes personalizados com canecas, quadro, garrafa e camiseta" width="552" height="551" fetchpriority="high"></figure>
 </section>
@@ -125,10 +134,43 @@ footer{background:#10152285}
 <section class="contact" id="contato" aria-labelledby="orcamento"><div class="wrap">
 <h2 id="orcamento">Peça seu orçamento</h2>
 <p class="intro">Conte o que você quer personalizar, a quantidade e a data em que precisa. Se tiver uma foto de referência, já deixe separada.</p>
-<div class="actions"><a class="button" href="https://wa.me/5511926822252?text=Ol%C3%A1%2C%20Lima%20Print%20Pro%21%20Gostaria%20de%20um%20or%C3%A7amento%20para%20um%20produto%20personalizado.">Falar pelo WhatsApp</a></div>
+<form id="pedido" class="quote-form" hidden>
+<div class="quote-fields">
+<label>Seu nome<input name="nome" autocomplete="name" required maxlength="80"></label>
+<label>Produto ou serviço<select name="produto" required><option value="">Selecione uma opção</option><option>Caneca personalizada</option><option>Caneca de chopp</option><option>Taças e copos personalizados</option><option>Impressão de fotos</option><option>Quadro personalizado</option><option>Quadro giratório</option><option>Cubo giratório</option><option>Azulejo decorativo</option><option>Estrela acrílica de Natal</option><option>Camiseta personalizada</option><option>Body infantil</option><option>Chaveiro personalizado</option><option>Topo de bolo</option><option>Brindes personalizados</option><option>Plaquinha com QR Code</option><option>Outro personalizado</option></select></label>
+<label class="quote-details">O que você gostaria de saber? (opcional)<textarea name="detalhes" rows="4" maxlength="600" placeholder="Ex.: preço para 10 unidades e prazo de entrega"></textarea></label>
+</div>
+<button class="button" type="submit">Continuar no WhatsApp</button>
+</form>
+<div id="contato-direto"><div class="actions"><a class="button" href="https://wa.me/5511926822252?text=Ol%C3%A1%2C%20Lima%20Print%20Pro%21%20Gostaria%20de%20um%20or%C3%A7amento%20para%20um%20produto%20personalizado.">Falar pelo WhatsApp</a></div></div>
 </div></section>
 </main>
 <footer><div class="wrap"><span>Lima Print Pro</span><a href="https://www.instagram.com/limaprintpro/">@limaprintpro</a></div></footer>
 
+<script>
+const pedido = document.querySelector("#pedido");
+const nome = pedido.elements.nome;
+nome.addEventListener("input", () => nome.setCustomValidity(""));
+pedido.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const cliente = nome.value.trim();
+  if (!cliente) {
+    nome.setCustomValidity("Informe seu nome.");
+    nome.reportValidity();
+    return;
+  }
+  const produto = pedido.elements.produto.value;
+  const detalhes = pedido.elements.detalhes.value.trim();
+  const linhas = [
+    "Olá, Lima Print Pro! Gostaria de pedir informações.",
+    "Meu nome: " + cliente,
+    "Produto ou serviço: " + produto
+  ];
+  if (detalhes) linhas.push("Detalhes: " + detalhes);
+  window.location.assign("https://wa.me/5511926822252?text=" + encodeURIComponent(linhas.join("\n")));
+});
+pedido.hidden = false;
+document.querySelector("#contato-direto").hidden = true;
+</script>
 </body>
 </html>
